@@ -1,4 +1,6 @@
-
+/*
+Аналогичным образом перепишите функцию по созданию шаблона попапа с подробной информацией о фильме. Обратите внимание на условия поведения того или иного элемента попапа, условия описаны в техническом задании.
+*/
 export const createFilmDetails = () => `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
     <div class="film-details__top-container">
