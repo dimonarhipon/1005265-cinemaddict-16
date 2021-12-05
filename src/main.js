@@ -41,8 +41,8 @@ if (movie.length > CARD_COUNT_PER_STEP) {
     evt.preventDefault();
 
     movie
-    .slice(renderedMovieCount, renderedMovieCount + CARD_COUNT_PER_STEP)
-    .forEach((movie) => renderTemplate(filmsContainers[0], createCard(movie), RenderPosition.BEFOREEND));
+      .slice(renderedMovieCount, renderedMovieCount + CARD_COUNT_PER_STEP)
+      .forEach((elem) => renderTemplate(filmsContainers[0], createCard(elem), RenderPosition.BEFOREEND));
 
     renderedMovieCount += CARD_COUNT_PER_STEP;
 

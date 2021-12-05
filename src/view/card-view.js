@@ -1,60 +1,60 @@
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 
 export const createCard = (movie) => {
-  const {title, total_rating, poster, description, genre, release, runtime} = movie.film_info;
+  const {title, totalRating, poster, description, genre, release, runtime} = movie.filminfo;
 
   const comments = movie.comments;
 
-  const ratingScore = (total_rating) => {
-    if (total_rating === 0 || total_rating === null) {
-      return "";
-    } 
-    if (total_rating < 5) {
-      return "poor";
+  const ratingScore = (rating) => {
+    if (rating === 0 || rating === null) {
+      return '';
     }
-    if (5 < total_rating && total_rating < 7) {
-      return "average";
+    if (rating < 5) {
+      return 'poor';
     }
-    if (total_rating >= 7) {
-      return "good";
+    if (5 < rating && rating < 7) {
+      return 'average';
+    }
+    if (rating >= 7) {
+      return 'good';
     }
   };
 
-  const durationMovie = (runtime) => {
-    const hours = dayjs(runtime).format("h");
-    const minute = dayjs(runtime).format("m");
-    return `${hours}h ${minute === 0 ? "" : minute}m`;
+  const durationMovie = (item) => {
+    const hours = dayjs(item).format('h');
+    const minute = dayjs(item).format('m');
+    return `${hours}h ${minute === 0 ? '' : minute}m`;
   };
 
-  return `<article class="film-card">
-    <a class="film-card__link">
-      <h3 class="film-card__title">${title}</h3>
-      <p class="film-card__rating film-card__rating--${ratingScore(total_rating)}">
-        ${total_rating === 0 || total_rating === null ? "" : total_rating}
+  return `<article class='film-card'>
+    <a class='film-card__link'>
+      <h3 class='film-card__title'>${title}</h3>
+      <p class='film-card__rating film-card__rating--${ratingScore(totalRating)}'>
+        ${totalRating === 0 || totalRating === null ? '' : totalRating}
       </p>
-      <p class="film-card__info">
-        <span class="film-card__year">
+      <p class='film-card__info'>
+        <span class='film-card__year'>
           ${release.date}
         </span>
-        <span class="film-card__duration">
+        <span class='film-card__duration'>
           ${durationMovie(runtime)}
         </span>
-        <span class="film-card__genre">
+        <span class='film-card__genre'>
           ${genre}
         </span>
       </p>
-      <img src=${poster} alt="" class="film-card__poster">
-      <p class="film-card__description">
+      <img src=${poster} alt='' class='film-card__poster'>
+      <p class='film-card__description'>
         ${description}
         </p>
-      <span class="film-card__comments">
-        ${comments.length} comment${comments.length === 1 ? "" : "s"}
+      <span class='film-card__comments'>
+        ${comments.length} comment${comments.length === 1 ? '' : 's'}
       </span>
     </a>
-    <div class="film-card__controls">
-      <button class="film-card__controls-item film-card__controls-item--add-to-watchlist" type="button">Add to watchlist</button>
-      <button class="film-card__controls-item film-card__controls-item--mark-as-watched" type="button">Mark as watched</button>
-      <button class="film-card__controls-item film-card__controls-item--favorite" type="button">Mark as favorite</button>
+    <div class='film-card__controls'>
+      <button class='film-card__controls-item film-card__controls-item--add-to-watchlist' type='button'>Add to watchlist</button>
+      <button class='film-card__controls-item film-card__controls-item--mark-as-watched' type='button'>Mark as watched</button>
+      <button class='film-card__controls-item film-card__controls-item--favorite' type='button'>Mark as favorite</button>
     </div>
   </article>`;
 };
