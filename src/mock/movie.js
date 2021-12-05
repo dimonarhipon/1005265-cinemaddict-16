@@ -1,84 +1,81 @@
 import { nanoid } from "nanoid";
-import { Dayjs } from "dayjs";
-import { getRandomInteger } from "../utils";
+import dayjs from "dayjs";
+import { getRandomInteger, getRandomElementOfArray } from "../utils";
 
-import { COMMENT_COUNT, EMOTIONS, AUTHORS, COMMENTS_TEXT, TITLS, ALTERNATIVE_TITLS, POSTERS, DESCRIPTIONS_TEXT } from "../const";
+import { COMMENT_COUNT, NAMES, EMOTIONS, COMMENTS_TEXT, TITLS, ALTERNATIVE_TITLS, POSTERS, DESCRIPTIONS_TEXT, GENERS, COUNTRYS, MAX_YEARS, MIN_YEARS, MAX_DAYS, MAX_HOURS, MIX_HOURS, MIN_MINUTE, MAX_MINUTE, COUNT_MOVIE, MAX_AGE_RATING} from "../const";
 
+const generateDurationMovie = () => {
+  const gapHours = getRandomInteger(MIX_HOURS, MAX_HOURS);
+  const gapMinute = getRandomInteger(MIN_MINUTE, MAX_MINUTE);
+  const time = dayjs().hour(gapHours).minute(gapMinute);
+  return time;
+};
 
-const generateDateComment = () => {
-  const maxDaysGap = 6;
-  const daysGap = getRandomInteger(0, maxDaysGap);
+const generateYears = () => {
+  const yearsGap = getRandomInteger(MIN_YEARS, MAX_YEARS);
+  const year = dayjs().year(yearsGap).format("YYYY");
+  return year;
+};
 
-  // const daysGap = getRandomInteger(minDaysGap, maxDaysGap);
-  // const timeGap = getRandomInteger(0, maxHoursGap);
-  // const minuteGap = getRandomInteger(0, maxMinuteGap);
-
-  // const day = dayjs().add(daysGap, `day`).add(timeGap, `hour`).add(minuteGap, `minutes`).toDate();
-
-  if (daysGap === 0) {
-    // 2 days ago
-  }
-
-  const date = Dayjs().add(daysGap, 'day').toDate()
-
+const generateDate = () => {
+  const daysGap = getRandomInteger(0, MAX_DAYS);
+  const date = dayjs().day(daysGap).toDate();
   return date;
 };
 
 const generateComment = () => ({
   "id": nanoid(),
-  "author": getRandomInteger(0, AUTHORS.length - 1),
-  "comment": getRandomInteger(0, COMMENTS_TEXT.length - 1),
-  // "date": generateDateComment(),
-  "emotion": getRandomInteger(0, EMOTIONS.length - 1)
-  // "date": "2019-05-11T16:12:32.554Z",
+  "author": getRandomElementOfArray(NAMES),
+  "comment": getRandomElementOfArray(COMMENTS_TEXT),
+  "date": generateDate(),
+  "emotion": getRandomElementOfArray(EMOTIONS)
 });
 
 const generateComments = () => {
-  return Array.from({length: COMMENT_COUNT}, generateComment());
-};
-
-const generatePoster = () => {
-  return POSTERS[getRandomInteger(0, POSTERS.length - 1)];
+  return Array.from({length: getRandomInteger(0, COMMENT_COUNT)}, generateComment);
 };
 
 const generateRating = () => {
   return (Math.ceil(getRandomInteger(1, 100)) * 0.1).toFixed(1);
-}
+};
+
 
 export const generageMovie = () => {
   return {
     "id": nanoid(),
-    // "comments": generateComments(),
+    "comments": generateComments(),
 
     "film_info": {
-      "title": TITLS[getRandomInteger(0, TITLS.length - 1)],
-      "alternative_title": ALTERNATIVE_TITLS[getRandomInteger(0, ALTERNATIVE_TITLS.length - 1)],
+      "title": getRandomElementOfArray(TITLS),
+      "alternative_title": getRandomElementOfArray(ALTERNATIVE_TITLS),
       "total_rating": generateRating(),
-      "poster": `images/posters/${generatePoster()}`,
-      "age_rating": 0,
-      "director": "Tom Ford",
+      "poster": `images/posters/${getRandomElementOfArray(POSTERS)}`,
+      "age_rating": getRandomInteger(0, MAX_AGE_RATING),
+      "director": getRandomElementOfArray(NAMES),
       "writers": [
-        "Takeshi Kitano"
+        getRandomElementOfArray(NAMES)
       ],
       "actors": [
-        "Morgan Freeman"
+        getRandomElementOfArray(NAMES)
       ],
       "release": {
-        "date": "2019-05-11T00:00:00.000Z",
-        "release_country": "Finland"
+        "date": generateYears(),
+        "release_country": getRandomElementOfArray(COUNTRYS)
       },
-      "runtime": 77,
+      "runtime": generateDurationMovie(),
       "genre": [
-        "Comedy"
+        getRandomElementOfArray(GENERS)
       ],
-      "description": DESCRIPTIONS_TEXT[getRandomInteger(0, DESCRIPTIONS_TEXT.length - 1)]
+      "description": getRandomElementOfArray(DESCRIPTIONS_TEXT)
     },
 
     "user_details": {
-      "watchlist": false,
-      "already_watched": true,
-      "watching_date": "2019-04-12T16:12:32.554Z",
-      "favorite": false
+      "watchlist": Boolean(getRandomInteger(0, 1)),
+      "already_watched": Boolean(getRandomInteger(0, 1)),
+      "watching_date": generateDate(),
+      "favorite": Boolean(getRandomInteger(0, 1))
     }
   };
 };
+
+export const generageCountMovie = () => COUNT_MOVIE;

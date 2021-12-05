@@ -1,7 +1,16 @@
 
 export const COMMENT_COUNT = 5;
+export const MAX_YEARS = 2021;
+export const MIN_YEARS = 1900;
+export const MAX_DAYS = 31;
+export const MAX_HOURS = 2;
+export const MIX_HOURS = 1;
+export const MIN_MINUTE = 0;
+export const MAX_MINUTE = 59;
+export const COUNT_MOVIE = 130291;
+export const MAX_AGE_RATING = 18;
+
 export const EMOTIONS = ["smile", "sleeping", "puke", "angry"];
-export const AUTHORS = ["Tim Macoveev", "John Doe", "Jon Jonson", "Harvey Keitel", "Tim Roth", "Michael Madsen", "Chris Penn", "Steve Buscemi", "Lawrence Tierney", "Randy Brooks", "Kirk Baltz", "Edward Bunker", "Quentin Tarantino"];
 export const COMMENTS_TEXT = [
   "Almost two hours? Seriously?",
   "Very very old. Meh",
@@ -12,6 +21,12 @@ export const COMMENTS_TEXT = [
 
 export const TITLS = [
   "A Little Pony Without The Carpet",
+  "The Dance of Life",
+  "Sagebrush Trail",
+  "The Man with the Golden Arm",
+  "Santa Claus Conquers the Martians",
+  "Popeye the Sailor Meets Sindbad the Sailor",
+  "The Great Flamarion",
 ];
 
 export const ALTERNATIVE_TITLS = [
@@ -36,4 +51,13 @@ export const POSTERS = [
   "the-dance-of-life.jpg",
   "the-great-flamarion.jpg",
   "the-man-with-the-golden-arm.jpg",
-]
+];
+export const GENERS = [
+  "Musical", "Western", "Drama", "Comedy", "Cartoon", "Mystery", "Film-Noir",  
+];
+export const NAMES = [
+  "Tim Macoveev", "John Doe", "Jon Jonson", "Harvey Keitel", "Tim Roth", "Michael Madsen", "Chris Penn", "Steve Buscemi", "Lawrence Tierney", "Randy Brooks", "Kirk Baltz", "Edward Bunker", "Quentin Tarantino", "Anthony Mann", "Anne Wigton", "Heinz Herald", "Richard Weil", "Erich von Stroheim", "Mary Beth Hughes", "Dan Duryea", "Tim Macoveev", "John Doe",
+];
+export const COUNTRYS = [
+  "USA", "Poland", "Germany", "Russia", "Japan", "China"
+];

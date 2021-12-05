@@ -1,2 +1,2 @@
 
-export const createCountFilms = () => '<p>130 291 movies inside</p>';
+export const createCountFilms = (count) => `<p>${count} movies inside</p>`
