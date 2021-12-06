@@ -1,9 +1,7 @@
 import dayjs from 'dayjs';
-import {createComment} from './comment-details-view';
 
 export const createFilmDetails = (movie) => {
   const {title, alternativeTitle, totalRating, poster, ageRating, director, writers, actors, description, genre, release, runtime} = movie.filminfo;
-
   const comments = movie.comments;
 
   const durationMovie = (item) => {
@@ -16,8 +14,6 @@ export const createFilmDetails = (movie) => {
     const realeaseDate = dayjs(date).format('D MMMM YYYY');
     return realeaseDate;
   };
-
-  const addComments = (count) => Array.from({length: count}, createComment).join('');
 
   return `<section class='film-details'>
     <form class='film-details__inner' action='' method='get'>
@@ -101,7 +97,7 @@ export const createFilmDetails = (movie) => {
             <span class='film-details__comments-count'>${comments.length}</span></h3>
 
           <ul class='film-details__comments-list'>
-            ${addComments(comments.length)}
+            
           </ul>
 
           <div class='film-details__new-comment'>

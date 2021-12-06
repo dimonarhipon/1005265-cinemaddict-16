@@ -6,6 +6,7 @@ import {createCountFilms} from './view/count-films-view';
 import {createCard} from './view/card-view.js';
 import {createButtonShowMore} from './view/button-more-view.js';
 import {createFilmDetails} from './view/film-details-view';
+import {createComment} from './view/comment-details-view';
 import {renderTemplate, RenderPosition} from './render';
 import {generageMovie, generageCountMovie } from './mock/movie.js';
 
@@ -55,3 +56,11 @@ if (movie.length > CARD_COUNT_PER_STEP) {
 renderTemplate(footerStats, createCountFilms(generageCountMovie()), RenderPosition.BEFOREEND);
 // popup
 renderTemplate(main, createFilmDetails(movie[0]), RenderPosition.BEFOREEND);
+
+const commentContainer = main.querySelector('.film-details__comments-list');
+
+const comments = movie.map((item) => item.comments);
+for (let i = 0; i < comments.length; i++) {
+  renderTemplate(commentContainer, createComment(...comments[i]), RenderPosition.BEFOREEND);
+}
+

@@ -44,7 +44,7 @@ export const generageMovie = () => ({
     'alternativeTitle': getRandomElementOfArray(ALTERNATIVE_TITLS),
     'totalRating': generateRating(),
     'poster': `images/posters/${getRandomElementOfArray(POSTERS)}`,
-    'agerating': getRandomInteger(0, MAX_AGE_RATING),
+    'ageRating': getRandomInteger(0, MAX_AGE_RATING),
     'director': getRandomElementOfArray(NAMES),
     'writers': [
       getRandomElementOfArray(NAMES)
