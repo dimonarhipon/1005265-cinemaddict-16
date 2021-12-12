@@ -1,6 +1,7 @@
+import {createElement} from '../render.js';
 import dayjs from 'dayjs';
 
-export const createCard = (movie) => {
+const createCard = (movie) => {
   const {title, totalRating, poster, description, genre, release, runtime} = movie.filminfo;
 
   const comments = movie.comments;
@@ -57,4 +58,29 @@ export const createCard = (movie) => {
       <button class='film-card__controls-item film-card__controls-item--favorite' type='button'>Mark as favorite</button>
     </div>
   </article>`;
+};
+
+export default class CardView {
+  #element = null;
+  #movie = null;
+
+  constructor(movie) {
+    this.#movie = movie;
+  }
+
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template() {
+    return createCard(this.#movie);
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
 };
