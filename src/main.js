@@ -8,7 +8,6 @@ import CountFilmsView from './view/count-films-view';
 import CardView from './view/card-view.js';
 import ButtonShowMoreView from './view/button-more-view.js';
 import FilmDetailsView from './view/film-details-view';
-import {createComment} from './view/comment-details-view';
 import {render, RenderPosition} from './render';
 import {generageMovie, generageCountMovie} from './mock/movie.js';
 
@@ -33,13 +32,23 @@ const filmsContainerComponent = new FilmsContainerView();
 render(boardComponent.element, filmsListComponent.element, RenderPosition.BEFOREEND);
 render(filmsListComponent.element, filmsContainerComponent.element, RenderPosition.BEFOREEND);
 
-const renderCard = (filmsContainers, movie) => {
-  const cardComponent = new CardView(movie);
-  const popupComponent = new FilmDetailsView(movie);
-
+const renderCard = (filmsContainers, movieInfo) => {
+  const cardComponent = new CardView(movieInfo);
+  const popupComponent = new FilmDetailsView(movieInfo);
 
   const buttonOpenPopup = cardComponent.element.querySelector('.film-card__link');
   const buttonClosePopup = popupComponent.element.querySelector('.film-details__close-btn');
+
+  const openPopupHandler = () => {
+    filmsContainers.appendChild(popupComponent.element);
+    document.querySelector('body').classList.add('hide-overflow');
+  };
+
+  const closePopupHandler = () => {
+    filmsContainers.removeChild(popupComponent.element);
+    buttonClosePopup.removeEventListener('click', closePopupHandler);
+    document.querySelector('body').classList.remove('hide-overflow');
+  };
 
   const onEscKeyDown = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
@@ -49,21 +58,9 @@ const renderCard = (filmsContainers, movie) => {
     }
   };
 
-  const openPopupHandler = () => {
-    filmsContainers.appendChild(popupComponent.element);
-    document.addEventListener('keydown', onEscKeyDown);
-  };
-
-  const closePopupHandler = () => {
-    filmsContainers.removeChild(popupComponent.element);
-    buttonClosePopup.removeEventListener('click', closePopupHandler);
-    document.querySelector('body').classList.remove('hide-overflow');
-  };
-
   buttonOpenPopup.addEventListener('click', () => {
     openPopupHandler();
     document.addEventListener('keydown', onEscKeyDown);
-    document.querySelector('body').classList.add('hide-overflow');
   });
 
   buttonClosePopup.addEventListener('click', closePopupHandler);
@@ -82,9 +79,7 @@ if (movie.length > CARD_COUNT_PER_STEP) {
 
 
   loadMoreButtonComponent.element.addEventListener('click', (evt) => {
-    evt.preventDefault(); 
-    console.log(evt);
-
+    evt.preventDefault();
     movie
       .slice(renderedMovieCount, renderedMovieCount + CARD_COUNT_PER_STEP)
       .forEach((elem) => render(filmsContainerComponent.element, elem));

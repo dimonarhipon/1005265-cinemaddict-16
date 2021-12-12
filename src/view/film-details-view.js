@@ -159,4 +159,4 @@ export default class FilmDetailsView {
   removeElement() {
     this.#element = null;
   }
-};
+}

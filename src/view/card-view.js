@@ -83,4 +83,4 @@ export default class CardView {
   removeElement() {
     this.#element = null;
   }
-};
+}

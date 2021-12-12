@@ -10,7 +10,7 @@ export default class ProfileUserView {
 
   get element() {
     if (!this.#element) {
-      this.#element = createElement(this.template)
+      this.#element = createElement(this.template);
     }
 
     return this.#element;
@@ -21,6 +21,6 @@ export default class ProfileUserView {
   }
 
   removeElement() {
-    return this.#element = null;
+    this.#element = null;
   }
-};
+}

@@ -9,10 +9,10 @@ export default class FilmsListView {
 
   get element() {
     if (!this.#element) {
-      this.#element = createElement(this.template)
+      this.#element = createElement(this.template);
     }
 
-    return this.#element
+    return this.#element;
   }
 
   get template() {
@@ -20,6 +20,6 @@ export default class FilmsListView {
   }
 
   removeElement() {
-    return this.#element;
+    this.#element = null;
   }
-};
+}

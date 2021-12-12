@@ -7,10 +7,10 @@ export default class FilmsContainerView {
 
   get element() {
     if (!this.#element) {
-      this.#element = createElement(this.template)
+      this.#element = createElement(this.template);
     }
 
-    return this.#element
+    return this.#element;
   }
 
   get template() {
@@ -18,6 +18,6 @@ export default class FilmsContainerView {
   }
 
   removeElement() {
-    return this.#element;
+    this.#element = null;
   }
-};
+}
