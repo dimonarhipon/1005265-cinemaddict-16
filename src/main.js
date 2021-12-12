@@ -77,17 +77,18 @@ if (movie.length > CARD_COUNT_PER_STEP) {
 
   render(filmsContainerComponent.element, new ButtonShowMoreView().element, RenderPosition.AFTEREND);
 
-
-  loadMoreButtonComponent.element.addEventListener('click', (evt) => {
+  filmsListComponent.element.querySelector('.films-list__show-more').addEventListener('click', (evt) => {
     evt.preventDefault();
+
     movie
       .slice(renderedMovieCount, renderedMovieCount + CARD_COUNT_PER_STEP)
-      .forEach((elem) => render(filmsContainerComponent.element, elem));
+      .forEach((elem) => renderCard(filmsContainerComponent.element, elem));
 
     renderedMovieCount += CARD_COUNT_PER_STEP;
 
     if (renderedMovieCount >= movie.length) {
-      loadMoreButtonComponent.remove();
+      loadMoreButtonComponent.element.remove();
+      loadMoreButtonComponent.removeElement();
     }
   });
 }
