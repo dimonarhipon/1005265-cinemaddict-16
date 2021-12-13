@@ -1,6 +1,7 @@
+import {createElement} from '../render.js';
 import dayjs from 'dayjs';
 
-export const createFilmDetails = (movie) => {
+const createFilmDetails = (movie) => {
   const {title, alternativeTitle, totalRating, poster, ageRating, director, writers, actors, description, genre, release, runtime} = movie.filminfo;
   const comments = movie.comments;
 
@@ -134,3 +135,28 @@ export const createFilmDetails = (movie) => {
     </form>
   </section>`;
 };
+
+export default class FilmDetailsView {
+  #element = null;
+  #movie = null;
+
+  constructor(movie) {
+    this.#movie = movie;
+  }
+
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template() {
+    return createFilmDetails(this.#movie);
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}
