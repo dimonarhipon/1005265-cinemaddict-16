@@ -6,31 +6,22 @@ import FilmsListView from './view/films-list-view';
 import FilmsContainerView from './view/films-container-view';
 import CountFilmsView from './view/count-films-view';
 import CardView from './view/card-view.js';
-import ButtonShowMoreView from './view/button-more-view.js';
+import ButtonShowMoreView from './view/button-more-view';
 import FilmDetailsView from './view/film-details-view';
+import NoFilmView from './view/no-film-view';
 import {render, RenderPosition} from './render';
-import {generageMovie, generageCountMovie} from './mock/movie.js';
+import {generageMovie, generageCountMovie} from './mock/movie';
 
 const CARD_COUNT = 20;
 const CARD_COUNT_PER_STEP = 5;
 
-const movie = Array.from({length: CARD_COUNT}, generageMovie);
+const movieData = Array.from({length: CARD_COUNT}, generageMovie);
 const countMovie = generageCountMovie();
 const header = document.querySelector('.header');
-const main = document.querySelector('.main');
+const mainContent = document.querySelector('.main');
 const footerStats = document.querySelector('.footer__statistics');
 
-
 render(header, new ProfileUserView().element, RenderPosition.BEFOREEND);
-render(main, new NavigationFilmsView().element, RenderPosition.BEFOREEND);
-render(main, new FilterFilmsView().element, RenderPosition.BEFOREEND);
-const boardComponent = new FilmsBoardView();
-render(main, boardComponent.element, RenderPosition.BEFOREEND);
-const filmsListComponent = new FilmsListView();
-const filmsContainerComponent = new FilmsContainerView();
-
-render(boardComponent.element, filmsListComponent.element, RenderPosition.BEFOREEND);
-render(filmsListComponent.element, filmsContainerComponent.element, RenderPosition.BEFOREEND);
 
 const renderCard = (filmsContainers, movieInfo) => {
   const cardComponent = new CardView(movieInfo);
@@ -67,31 +58,49 @@ const renderCard = (filmsContainers, movieInfo) => {
   render(filmsContainers, cardComponent.element, RenderPosition.BEFOREEND);
 };
 
-for (let i = 0; i < Math.min(movie.length, CARD_COUNT_PER_STEP); i++) {
-  renderCard(filmsContainerComponent.element, movie[i]);
-}
+const renderBoard = (main, movie) => {
+  render(main, new NavigationFilmsView().element, RenderPosition.BEFOREEND);
+  render(main, new FilterFilmsView().element, RenderPosition.BEFOREEND);
+  const boardComponent = new FilmsBoardView();
+  render(main, boardComponent.element, RenderPosition.BEFOREEND);
+  const filmsListComponent = new FilmsListView();
+  const filmsContainerComponent = new FilmsContainerView();
 
-if (movie.length > CARD_COUNT_PER_STEP) {
-  let renderedMovieCount = CARD_COUNT_PER_STEP;
-  const loadMoreButtonComponent = new ButtonShowMoreView();
+  if (movie.length === 0) {
+    render(boardComponent.element, new NoFilmView().element, RenderPosition.AFTERBEGIN);
+    return;
+  }
 
-  render(filmsContainerComponent.element, new ButtonShowMoreView().element, RenderPosition.AFTEREND);
+  render(boardComponent.element, filmsListComponent.element, RenderPosition.BEFOREEND);
+  render(filmsListComponent.element, filmsContainerComponent.element, RenderPosition.BEFOREEND);
 
-  filmsListComponent.element.querySelector('.films-list__show-more').addEventListener('click', (evt) => {
-    evt.preventDefault();
+  for (let i = 0; i < Math.min(movie.length, CARD_COUNT_PER_STEP); i++) {
+    renderCard(filmsContainerComponent.element, movie[i]);
+  }
 
-    movie
-      .slice(renderedMovieCount, renderedMovieCount + CARD_COUNT_PER_STEP)
-      .forEach((elem) => renderCard(filmsContainerComponent.element, elem));
+  if (movie.length > CARD_COUNT_PER_STEP) {
+    let renderedMovieCount = CARD_COUNT_PER_STEP;
+    const loadMoreButtonComponent = new ButtonShowMoreView();
 
-    renderedMovieCount += CARD_COUNT_PER_STEP;
+    render(filmsContainerComponent.element, loadMoreButtonComponent.element, RenderPosition.AFTEREND);
 
-    if (renderedMovieCount >= movie.length) {
-      loadMoreButtonComponent.element.remove();
-      loadMoreButtonComponent.removeElement();
-    }
-  });
-}
+    loadMoreButtonComponent.element.addEventListener('click', (evt) => {
+      evt.preventDefault();
 
+      movie
+        .slice(renderedMovieCount, renderedMovieCount + CARD_COUNT_PER_STEP)
+        .forEach((elem) => renderCard(filmsContainerComponent.element, elem));
+
+      renderedMovieCount += CARD_COUNT_PER_STEP;
+
+      if (renderedMovieCount >= movie.length) {
+        loadMoreButtonComponent.element.remove();
+        loadMoreButtonComponent.removeElement();
+      }
+    });
+  }
+};
+
+renderBoard(mainContent, movieData);
 render(footerStats, new CountFilmsView(countMovie).element, RenderPosition.BEFOREEND);
 
