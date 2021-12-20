@@ -27,8 +27,6 @@ const renderCard = (filmsContainers, movieInfo) => {
   const cardComponent = new CardView(movieInfo);
   const popupComponent = new FilmDetailsView(movieInfo);
 
-  const buttonOpenPopup = cardComponent.element.querySelector('.film-card__link');
-  const buttonClosePopup = popupComponent.element.querySelector('.film-details__close-btn');
 
   const openPopupHandler = () => {
     filmsContainers.appendChild(popupComponent.element);
@@ -37,7 +35,6 @@ const renderCard = (filmsContainers, movieInfo) => {
 
   const closePopupHandler = () => {
     filmsContainers.removeChild(popupComponent.element);
-    buttonClosePopup.removeEventListener('click', closePopupHandler);
     document.querySelector('body').classList.remove('hide-overflow');
   };
 
@@ -49,12 +46,12 @@ const renderCard = (filmsContainers, movieInfo) => {
     }
   };
 
-  buttonOpenPopup.addEventListener('click', () => {
+  cardComponent.setOpenClickHandler(() => {
     openPopupHandler();
     document.addEventListener('keydown', onEscKeyDown);
   });
 
-  buttonClosePopup.addEventListener('click', closePopupHandler);
+  popupComponent.setCloseClickHandler(closePopupHandler);
   render(filmsContainers, cardComponent.element, RenderPosition.BEFOREEND);
 };
 
@@ -84,9 +81,7 @@ const renderBoard = (main, movie) => {
 
     render(filmsContainerComponent.element, loadMoreButtonComponent.element, RenderPosition.AFTEREND);
 
-    loadMoreButtonComponent.element.addEventListener('click', (evt) => {
-      evt.preventDefault();
-
+    loadMoreButtonComponent.setClickHandler(() => {
       movie
         .slice(renderedMovieCount, renderedMovieCount + CARD_COUNT_PER_STEP)
         .forEach((elem) => renderCard(filmsContainerComponent.element, elem));

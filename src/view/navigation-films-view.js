@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from './abstract-view';
 
 const createNavigationFilms = () => `<nav class="main-navigation">
   <div class="main-navigation__items">
@@ -10,22 +10,8 @@ const createNavigationFilms = () => `<nav class="main-navigation">
   <a href="#stats" class="main-navigation__additional">Stats</a>
 </nav>`;
 
-export default class NavigationFilmsView {
-  #element = null;
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
+export default class NavigationFilmsView extends AbstractView {
   get template() {
     return createNavigationFilms();
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }
