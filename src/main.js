@@ -1,7 +1,7 @@
 import ProfileUserView from './view/profile-user-view.js';
 import CountFilmsView from './view/count-films-view';
 import BoardPresenter from './presenter/board-presenter.js';
-import {render, RenderPosition} from './render';
+import {render, RenderPosition} from './utils.js';
 import {generageMovie, generageCountMovie} from './mock/movie';
 
 const CARD_COUNT = 20;
