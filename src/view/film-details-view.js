@@ -2,7 +2,8 @@ import AbstractView from './abstract-view';
 import dayjs from 'dayjs';
 
 const createFilmDetails = (movie) => {
-  const {title, alternativeTitle, totalRating, poster, ageRating, director, writers, actors, description, genre, release, runtime} = movie.filminfo;
+  const {title, alternativeTitle, totalRating, poster, ageRating, director, writers, actors, description, genre, release, runtime} = movie.filmInfo;
+  const {isWatch, isWatched, isFavorite} = movie.userDetails;
   const comments = movie.comments;
 
   const durationMovie = (item) => {
@@ -15,6 +16,18 @@ const createFilmDetails = (movie) => {
     const realeaseDate = dayjs(date).format('D MMMM YYYY');
     return realeaseDate;
   };
+
+  const watchClassName = isWatch
+    ? 'film-details__control-button--watchlist film-details__control-button--active'
+    : 'film-details__control-button--watchlist';
+
+  const favoriteClassName = isFavorite
+    ? 'film-details__control-button--favorite film-details__control-button--active'
+    : 'film-details__control-button--favorite';
+
+  const watchedClassName = isWatched
+    ? 'film-details__control-button--watched film-details__control-button--active'
+    : 'film-details__control-button--watched';
 
   return `<section class='film-details'>
     <form class='film-details__inner' action='' method='get'>
@@ -85,9 +98,9 @@ const createFilmDetails = (movie) => {
         </div>
 
         <section class='film-details__controls'>
-          <button type='button' class='film-details__control-button film-details__control-button--watchlist' id='watchlist' name='watchlist'>Add to watchlist</button>
-          <button type='button' class='film-details__control-button film-details__control-button--active film-details__control-button--watched' id='watched' name='watched'>Already watched</button>
-          <button type='button' class='film-details__control-button film-details__control-button--favorite' id='favorite' name='favorite'>Add to favorites</button>
+          <button type='button' class='film-details__control-button ${watchClassName}' id='watchlist' name='watchlist'>Add to watchlist</button>
+          <button type='button' class='film-details__control-button ${watchedClassName}' id='watched' name='watched'>Already watched</button>
+          <button type='button' class='film-details__control-button ${favoriteClassName}' id='favorite' name='favorite'>Add to favorites</button>
         </section>
       </div>
 
@@ -157,4 +170,34 @@ export default class FilmDetailsView extends AbstractView {
     evt.preventDefault();
     this._callback.closeClick();
   }
+
+  #controlWatchClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.controlWatchClick();
+  }
+
+  setControlWatch = (callback) => {
+    this._callback.controlWatchClick = callback;
+    this.element.querySelector('.film-details__control-button--watchlist').addEventListener('click', this.#controlWatchClickHandler);
+  };
+
+  #controlFavoriteClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.controlFavoriteClick();
+  }
+
+  setControlFavorite = (callback) => {
+    this._callback.controlFavoriteClick = callback;
+    this.element.querySelector('.film-details__control-button--favorite').addEventListener('click', this.#controlFavoriteClickHandler);
+  };
+
+  #controlWatchedClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.controlWatchedClick();
+  }
+
+  setControlWatched = (callback) => {
+    this._callback.controlWatchedClick = callback;
+    this.element.querySelector('.film-details__control-button--watched').addEventListener('click', this.#controlWatchedClickHandler);
+  };
 }

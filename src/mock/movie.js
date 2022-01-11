@@ -39,7 +39,14 @@ export const generageMovie = () => ({
   'id': nanoid(),
   'comments': generateComments(),
 
-  'filminfo': {
+  'userDetails': {
+    'isWatch': Boolean(getRandomInteger(0, 1)),
+    'isWatched': Boolean(getRandomInteger(0, 1)),
+    'watchingDate': generateDate(),
+    'isFavorite': Boolean(getRandomInteger(0, 1))
+  },
+
+  'filmInfo': {
     'title': getRandomElementOfArray(TITLS),
     'alternativeTitle': getRandomElementOfArray(ALTERNATIVE_TITLS),
     'totalRating': generateRating(),
@@ -62,13 +69,6 @@ export const generageMovie = () => ({
     ],
     'description': getRandomElementOfArray(DESCRIPTIONS_TEXT)
   },
-
-  'user_details': {
-    'watchlist': Boolean(getRandomInteger(0, 1)),
-    'already_watched': Boolean(getRandomInteger(0, 1)),
-    'watching_date': generateDate(),
-    'favorite': Boolean(getRandomInteger(0, 1))
-  }
 });
 
 export const generageCountMovie = () => COUNT_MOVIE;

@@ -2,7 +2,8 @@ import AbstractView from './abstract-view';
 import dayjs from 'dayjs';
 
 const createCard = (movie) => {
-  const {title, totalRating, poster, description, genre, release, runtime} = movie.filminfo;
+  const {title, totalRating, poster, description, genre, release, runtime} = movie.filmInfo;
+  const {isWatch, isWatched, isFavorite} = movie.userDetails;
 
   const comments = movie.comments;
 
@@ -26,6 +27,18 @@ const createCard = (movie) => {
     const minute = dayjs(item).format('m');
     return `${hours}h ${minute === 0 ? '' : minute}m`;
   };
+
+  const watchClassName = isWatch
+    ? 'film-card__controls-item--add-to-watchlist film-card__controls-item--active'
+    : 'film-card__controls-item--add-to-watchlist';
+
+  const favoriteClassName = isFavorite
+    ? 'film-card__controls-item--favorite film-card__controls-item--active'
+    : 'film-card__controls-item--favorite';
+
+  const watchedClassName = isWatched
+    ? 'film-card__controls-item--mark-as-watched film-card__controls-item--active'
+    : 'film-card__controls-item--mark-as-watched';
 
   return `<article class='film-card'>
     <a class='film-card__link'>
@@ -53,9 +66,9 @@ const createCard = (movie) => {
       </span>
     </a>
     <div class='film-card__controls'>
-      <button class='film-card__controls-item film-card__controls-item--add-to-watchlist' type='button'>Add to watchlist</button>
-      <button class='film-card__controls-item film-card__controls-item--mark-as-watched' type='button'>Mark as watched</button>
-      <button class='film-card__controls-item film-card__controls-item--favorite' type='button'>Mark as favorite</button>
+      <button class='film-card__controls-item ${watchClassName}' type='button'>Add to watchlist</button>
+      <button class='film-card__controls-item ${watchedClassName}' type='button'>Mark as watched</button>
+      <button class='film-card__controls-item ${favoriteClassName}' type='button'>Mark as favorite</button>
     </div>
   </article>`;
 };
@@ -81,4 +94,34 @@ export default class CardView extends AbstractView {
     evt.preventDefault();
     this._callback.openClick();
   }
+
+  #controlWatchClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.controlWatchClick();
+  }
+
+  setControlWatch = (callback) => {
+    this._callback.controlWatchClick = callback;
+    this.element.querySelector('.film-card__controls-item--add-to-watchlist').addEventListener('click', this.#controlWatchClickHandler);
+  };
+
+  #controlFavoriteClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.controlFavoriteClick();
+  }
+
+  setControlFavorite = (callback) => {
+    this._callback.controlFavoriteClick = callback;
+    this.element.querySelector('.film-card__controls-item--favorite').addEventListener('click', this.#controlFavoriteClickHandler);
+  };
+
+  #controlWatchedClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.controlWatchedClick();
+  }
+
+  setControlWatched = (callback) => {
+    this._callback.controlWatchedClick = callback;
+    this.element.querySelector('.film-card__controls-item--mark-as-watched').addEventListener('click', this.#controlWatchedClickHandler);
+  };
 }
