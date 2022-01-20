@@ -55,3 +55,8 @@ export const NAMES = [
 export const COUNTRYS = [
   'USA', 'Poland', 'Germany', 'Russia', 'Japan', 'China'
 ];
+export const SortType = {
+  DEFAULT: 'defoult',
+  DATE: 'date',
+  RATING: 'rating'
+};
