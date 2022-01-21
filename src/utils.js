@@ -14,7 +14,7 @@ export const getRandomInteger = (a = 0, b = 1) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
-export const getRandomElementOfArray = (array) => array[getRandomInteger(0, array.length - 1)];
+export const getRandomElementOfArray = (array) => array[getRandomInteger(1, array.length - 1)];
 
 export const updateItem = (items, update) => {
   const index = items.findIndex((item) => item.id === update.id);
