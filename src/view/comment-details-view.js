@@ -1,3 +1,4 @@
+import AbstractView from './abstract-view';
 import dayjs from 'dayjs';
 
 export const createComment = (message = []) => {
@@ -21,3 +22,16 @@ export const createComment = (message = []) => {
     </div>
   </li>`;
 };
+
+export default class CommentView extends AbstractView {
+  #comment = null;
+
+  constructor(comment) {
+    super();
+    this.#comment = comment;
+  }
+
+  get template() {
+    return createComment(this.#comment);
+  }
+}

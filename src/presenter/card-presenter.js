@@ -1,4 +1,4 @@
-import CardView from '../view/card-view.js';
+import CardView from '../view/card-view';
 import FilmDetailsView from '../view/film-details-view';
 import {remove, render, replace, RenderPosition} from '../utils';
 
@@ -27,12 +27,12 @@ export default class CardPresenter {
       this.#openPopupHandler();
       document.addEventListener('keydown', this.#onEscKeyDown);
     });
-    this.#popupComponent.setCloseClickHandler(this.#closePopupHandler);
 
     this.#cardComponent.setControlWatch(this.#controlWatchList);
     this.#cardComponent.setControlFavorite(this.#controlFavoriteList);
     this.#cardComponent.setControlWatched(this.#controlWatchedList);
 
+    this.#popupComponent.setCloseClickHandler(this.#closePopupHandler);
     this.#popupComponent.setControlWatch(this.#controlWatchList);
     this.#popupComponent.setControlFavorite(this.#controlFavoriteList);
     this.#popupComponent.setControlWatched(this.#controlWatchedList);
@@ -57,6 +57,12 @@ export default class CardPresenter {
   #openPopupHandler = () => {
     render(this.#cardListContainer, this.#popupComponent.element, RenderPosition.BEFOREEND);
     document.querySelector('body').classList.add('hide-overflow');
+
+    this.#popupComponent.setControlWatch(this.#controlWatchList);
+    this.#popupComponent.setControlFavorite(this.#controlFavoriteList);
+    this.#popupComponent.setControlWatched(this.#controlWatchedList);
+    this.#popupComponent.setCloseClickHandler(this.#closePopupHandler);
+    this.#popupComponent.setInnerHandlers();
   };
 
   #closePopupHandler = () => {
