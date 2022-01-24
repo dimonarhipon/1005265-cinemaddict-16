@@ -1,5 +1,5 @@
 import CardView from '../view/card-view';
-import FilmDetailsView from '../view/film-details-view';
+import PopupView from '../view/popup-view';
 import {remove, render, replace, RenderPosition} from '../utils';
 
 export default class CardPresenter {
@@ -21,7 +21,7 @@ export default class CardPresenter {
     const prevPopupComponent = this.#popupComponent;
 
     this.#cardComponent = new CardView(movieInfo);
-    this.#popupComponent = new FilmDetailsView(movieInfo);
+    this.#popupComponent = new PopupView(movieInfo);
 
     this.#cardComponent.setOpenClickHandler(() => {
       this.#openPopupHandler();

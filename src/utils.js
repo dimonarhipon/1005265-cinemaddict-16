@@ -89,3 +89,19 @@ export const remove = (component) => {
 
 export const sortFilmsByRating = (cardA, cardB) => cardB.filmInfo.totalRating - cardA.filmInfo.totalRating;
 export const sortFilmsByDate = (cardA, cardB) => cardB.filmInfo.release.date - cardA.filmInfo.release.date;
+
+export default class AbstractObservable {
+  #observers = new Set();
+
+  addObserver(observer) {
+    this.#observers.add(observer);
+  }
+
+  removeObserver(observer) {
+    this.#observers.delete(observer);
+  }
+
+  _notify(event, payload) {
+    this.#observers.forEach((observer) => observer(event, payload));
+  }
+}

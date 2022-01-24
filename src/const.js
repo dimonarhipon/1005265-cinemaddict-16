@@ -30,7 +30,7 @@ export const TITLS = [
 ];
 
 export const ALTERNATIVE_TITLS = [
-  'Laziness Who Sold Themselves',
+  'Laziness Who Sold Themselves', 'No Time to Die'
 ];
 
 export const DESCRIPTIONS_TEXT = [

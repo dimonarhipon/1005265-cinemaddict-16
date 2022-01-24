@@ -1,8 +1,8 @@
 import AbstractView from './abstract-view';
 import dayjs from 'dayjs';
 
-export const createComment = (message = []) => {
-  const {author = 'mike', comment = 'norm', date, emotion = 'sleeping'} = message;
+export const createComment = (comment = []) => {
+  const {author = 'mike', message = 'norm', date, emotion = 'sleeping'} = comment;
   const releaseMovie = (item) => {
     const realeaseDate = dayjs(item).format('YYYY/MM/DD/hh:mm');
     return realeaseDate;
@@ -13,7 +13,7 @@ export const createComment = (message = []) => {
       <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="${emotion}">
     </span>
     <div>
-      <p class="film-details__comment-text">${comment}</p>
+      <p class="film-details__comment-text">${message}</p>
       <p class="film-details__comment-info">
         <span class="film-details__comment-author">${author}</span>
         <span class="film-details__comment-day">${releaseMovie(date)}</span>

@@ -1,9 +1,9 @@
-import {createComment} from './comment-details-view';
+import {createComment} from './comment-view';
 import SmartView from './smart-view';
 import dayjs from 'dayjs';
 import {EMOTIONS} from '../const';
 
-const createFilmDetails = (data) => {
+const createPopup = (data) => {
   const {title, alternativeTitle, totalRating, poster, ageRating, director, writers, actors, description, genre, release, runtime} = data.filmInfo;
   const {isWatch, isWatched, isFavorite} = data.userDetails;
   const comments = data.comments;
@@ -160,19 +160,19 @@ const createFilmDetails = (data) => {
   </section>`;
 };
 
-export default class FilmDetailsView extends SmartView {
+export default class PopupView extends SmartView {
   _scrollPosition = 0;
   #elementScroll;
   #newElementScroll;
 
   constructor(movie) {
     super();
-    this._data = FilmDetailsView.parseFilmToData(movie);
+    this._data = PopupView.parseFilmToData(movie);
     this.setInnerHandlers();
   }
 
   get template() {
-    return createFilmDetails(this._data);
+    return createPopup(this._data);
   }
 
   saveScrollPosition = () => {
@@ -197,7 +197,9 @@ export default class FilmDetailsView extends SmartView {
 
   #controlWatchClickHandler = (evt) => {
     evt.preventDefault();
+    this.saveScrollPosition();
     this._callback.controlWatchClick();
+    this.setScrollposition();
   }
 
   setControlWatch = (callback) => {
@@ -207,7 +209,9 @@ export default class FilmDetailsView extends SmartView {
 
   #controlFavoriteClickHandler = (evt) => {
     evt.preventDefault();
+    this.saveScrollPosition();
     this._callback.controlFavoriteClick();
+    this.setScrollposition();
   }
 
   setControlFavorite = (callback) => {
@@ -217,7 +221,9 @@ export default class FilmDetailsView extends SmartView {
 
   #controlWatchedClickHandler = (evt) => {
     evt.preventDefault();
+    this.saveScrollPosition();
     this._callback.controlWatchedClick();
+    this.setScrollposition();
   }
 
   setControlWatched = (callback) => {
@@ -237,7 +243,7 @@ export default class FilmDetailsView extends SmartView {
 
   reset = (film) => {
     this.updateData(
-      FilmDetailsView.parseFilmToData(film),
+      PopupView.parseFilmToData(film),
     );
   }
 

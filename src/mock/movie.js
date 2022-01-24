@@ -26,7 +26,7 @@ const generateDate = () => {
 const generateComment = () => ({
   'id': nanoid(),
   'author': getRandomElementOfArray(NAMES),
-  'comment': getRandomElementOfArray(COMMENTS_TEXT),
+  'message': getRandomElementOfArray(COMMENTS_TEXT),
   'date': generateDate(),
   'emotion': getRandomElementOfArray(EMOTIONS)
 });

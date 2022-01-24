@@ -14,6 +14,7 @@ const CARD_COUNT_PER_STEP = 5;
 
 export default class BoardPresenter {
   #boardContainer = null;
+  #filmsModel = null;
 
   #navigationFilms = new NavigationFilmsView();
   #filterFilms = new FilterFilmsView();
@@ -29,8 +30,9 @@ export default class BoardPresenter {
   #currentSortType = SortType.DEFAULT;
   #sourcedBoardCards = [];
 
-  constructor(boardContainer) {
+  constructor(boardContainer, filmsModel) {
     this.#boardContainer = boardContainer;
+    this.#filmsModel = filmsModel;
   }
 
   init = (dataFilms) => {
@@ -44,6 +46,10 @@ export default class BoardPresenter {
     this.#filterFilms.setFilterClickHandler(this.#handleFilterFilms);
 
     this.#renderBoard();
+  }
+
+  get films() {
+    return this.#filmsModel.films;
   }
 
   #sortCards = (sortType) => {
