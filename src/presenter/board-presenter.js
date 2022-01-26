@@ -164,7 +164,6 @@ export default class BoardPresenter {
   }
 
   #handleSortFilms = (sortType) => {
-    console.log(5);
     if (this.#currentSortType === sortType) {
       return;
     }
@@ -175,10 +174,8 @@ export default class BoardPresenter {
 
   #renderSort = () => {
     this.#filmsSortComponent = new SortFilmsView(this.#currentSortType);
-    console.log(4)
     this.#filmsSortComponent.setSortClickHandler(this.#handleSortFilms);
-    console.log(this.#handleSortFilms);
-    render(this.#boardContainer, this.#handleSortFilms, RenderPosition.BEFOREEND);
+    render(this.#boardContainer, this.#filmsSortComponent, RenderPosition.BEFOREEND);
   }
 
   #renderBoard = () => {

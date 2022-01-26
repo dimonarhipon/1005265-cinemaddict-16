@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 const createCard = (movie) => {
   const {title, totalRating, poster, description, genre, release, runtime} = movie.filmInfo;
   const {isWatch, isWatched, isFavorite} = movie.userDetails;
+  console.log(movie);
 
   const comments = movie.comments;
 
