@@ -7,6 +7,7 @@ const createCard = (movie) => {
 
   const comments = movie.comments;
 
+
   const ratingScore = (rating) => {
     if (rating === 0 || rating === null) {
       return '';

@@ -60,3 +60,19 @@ export const SortType = {
   DATE: 'date',
   RATING: 'rating'
 };
+export const FilterType = {
+  ALL: 'All movies',
+  WATCHLIST: 'Watchlist',
+  FAVORITES: 'Favorites',
+  HISTORY: 'History',
+};
+export const UserAction = {
+  ADD_ELEMENT: 'ADD_ELEMENT',
+  DELETE_ELEMENT: 'DELETE_ELEMENT',
+  UPDATE_ELEMENT: 'UPDATE_ELEMENT',
+};
+export const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};

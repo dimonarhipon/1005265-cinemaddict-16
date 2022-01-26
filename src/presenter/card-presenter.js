@@ -1,5 +1,6 @@
 import CardView from '../view/card-view';
 import PopupView from '../view/popup-view';
+// import {UserAction, UpdateType} from '../const';
 import {remove, render, replace, RenderPosition} from '../utils';
 
 export default class CardPresenter {

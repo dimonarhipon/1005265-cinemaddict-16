@@ -1,4 +1,5 @@
 import AbstractView from './view/abstract-view.js';
+import { FilterType } from './const.js';
 
 export const RenderPosition = {
   BEFOREBEGIN: 'beforebegin',
@@ -15,20 +16,6 @@ export const getRandomInteger = (a = 0, b = 1) => {
 };
 
 export const getRandomElementOfArray = (array) => array[getRandomInteger(1, array.length - 1)];
-
-export const updateItem = (items, update) => {
-  const index = items.findIndex((item) => item.id === update.id);
-
-  if (index === -1) {
-    return items;
-  }
-
-  return [
-    ...items.slice(0, index),
-    update,
-    ...items.slice(index + 1),
-  ];
-};
 
 export const render = (container, element, place) => {
   const parent = container instanceof AbstractView ? container.element : container;
@@ -105,3 +92,10 @@ export default class AbstractObservable {
     this.#observers.forEach((observer) => observer(event, payload));
   }
 }
+
+export const filter = {
+  [FilterType.ALL]: (films) => films,
+  [FilterType.WATCH]: (films) => films.filter((film) => film.isWatch),
+  [FilterType.HISTORY]: (films) => films.filter((film) => film.isWatched),
+  [FilterType.FAVORITES]: (films) => films.filter((film) => film.isFavorite),
+};
