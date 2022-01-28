@@ -95,7 +95,7 @@ export default class AbstractObservable {
 
 export const filter = {
   [FilterType.ALL]: (films) => films,
-  [FilterType.WATCH]: (films) => films.filter((film) => film.isWatch),
+  [FilterType.WATCHLIST]: (films) => films.filter((film) => film.isWatch),
   [FilterType.HISTORY]: (films) => films.filter((film) => film.isWatched),
   [FilterType.FAVORITES]: (films) => films.filter((film) => film.isFavorite),
 };

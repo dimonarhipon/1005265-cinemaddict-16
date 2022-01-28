@@ -13,9 +13,12 @@ const movieData = Array.from({length: CARD_COUNT}, generageMovie);
 const countMovie = generageCountMovie();
 const filmsModel = new FilmsModel();
 filmsModel.films = movieData;
-// const filtres = movieData;
+
 const filterModel = new FilterModel();
 const commentsModel = new CommentsModel();
+
+const comments = movieData.map((item) => item.comments);
+commentsModel.filmComments = comments;
 
 const header = document.querySelector('.header');
 const mainContent = document.querySelector('.main');

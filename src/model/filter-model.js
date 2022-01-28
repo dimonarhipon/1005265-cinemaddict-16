@@ -4,8 +4,8 @@ import {FilterType} from '../const';
 export default class FilterModel extends AbstractObservable {
   #filter = FilterType.ALL;
 
-  setfilmsFilter(updateType, filter) {
-    this.#filter = [...filter];
+  setFilmsFilter(updateType, filter) {
+    this.#filter = filter;
     this._notify(updateType, filter);
   }
 

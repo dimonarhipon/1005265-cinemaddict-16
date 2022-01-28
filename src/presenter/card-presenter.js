@@ -1,6 +1,6 @@
 import CardView from '../view/card-view';
 import PopupView from '../view/popup-view';
-// import {UserAction, UpdateType} from '../const';
+import {UserAction, UpdateType} from '../const';
 import {remove, render, replace, RenderPosition} from '../utils';
 
 export default class CardPresenter {
@@ -9,20 +9,22 @@ export default class CardPresenter {
   #cardListContainer = null;
   #changeData = null;
   #movieInfo = null;
+  #comments = null;
 
   constructor(cardListContainer, changeData) {
     this.#cardListContainer = cardListContainer;
     this.#changeData = changeData;
   }
 
-  init = (movieInfo) => {
+  init = (movieInfo, comments) => {
     this.#movieInfo = movieInfo;
+    this.#comments = [...comments];
 
     const prevCardComponent = this.#cardComponent;
     const prevPopupComponent = this.#popupComponent;
 
     this.#cardComponent = new CardView(movieInfo);
-    this.#popupComponent = new PopupView(movieInfo);
+    this.#popupComponent = new PopupView(movieInfo, this.#comments);
 
     this.#cardComponent.setOpenClickHandler(() => {
       this.#openPopupHandler();
@@ -37,6 +39,8 @@ export default class CardPresenter {
     this.#popupComponent.setControlWatch(this.#controlWatchList);
     this.#popupComponent.setControlFavorite(this.#controlFavoriteList);
     this.#popupComponent.setControlWatched(this.#controlWatchedList);
+    // this.#popupComponent.setSubmitComment(this.#submitComment);
+    this.#popupComponent.setDeleteComment(this.#deleteComment);
 
     if (prevCardComponent === null || prevPopupComponent === null) {
       render(this.#cardListContainer, this.#cardComponent.element, RenderPosition.BEFOREEND);
@@ -59,14 +63,11 @@ export default class CardPresenter {
     render(this.#cardListContainer, this.#popupComponent.element, RenderPosition.BEFOREEND);
     document.querySelector('body').classList.add('hide-overflow');
 
-    this.#popupComponent.setControlWatch(this.#controlWatchList);
-    this.#popupComponent.setControlFavorite(this.#controlFavoriteList);
-    this.#popupComponent.setControlWatched(this.#controlWatchedList);
-    this.#popupComponent.setCloseClickHandler(this.#closePopupHandler);
-    this.#popupComponent.setInnerHandlers();
+    this.#popupComponent.restoreHandlers();
   };
 
   #closePopupHandler = () => {
+    this.#popupComponent.reset(this.#movieInfo);
     remove(this.#popupComponent);
     document.querySelector('body').classList.remove('hide-overflow');
   };
@@ -80,33 +81,57 @@ export default class CardPresenter {
   };
 
   #controlWatchList = () => {
-    this.#changeData({
-      ...this.#movieInfo,
-      userDetails: {
-        ...this.#movieInfo.userDetails,
-        isWatch: !this.#movieInfo.userDetails.isWatch
-      }
-    });
+    this.#changeData(
+      UserAction.UPDATE_ELEMENT,
+      UpdateType.MINOR,
+      {...this.#movieInfo,
+        userDetails: {
+          ...this.#movieInfo.userDetails,
+          isWatch: !this.#movieInfo.userDetails.isWatch
+        }
+      });
   };
 
   #controlFavoriteList = () => {
-    this.#changeData({
-      ...this.#movieInfo,
-      userDetails: {
-        ...this.#movieInfo.userDetails,
-        isFavorite: !this.#movieInfo.userDetails.isFavorite
-      }
-    });
+    this.#changeData(
+      UserAction.UPDATE_ELEMENT,
+      UpdateType.MINOR,
+      {...this.#movieInfo,
+        userDetails: {
+          ...this.#movieInfo.userDetails,
+          isFavorite: !this.#movieInfo.userDetails.isFavorite
+        }
+      });
   };
 
   #controlWatchedList = () => {
-    this.#changeData({
-      ...this.#movieInfo,
-      userDetails: {
-        ...this.#movieInfo.userDetails,
-        isWatched: !this.#movieInfo.userDetails.isWatched
-      }
-    });
+    this.#changeData(
+      UserAction.UPDATE_ELEMENT,
+      UpdateType.MINOR,
+      {...this.#movieInfo,
+        userDetails: {
+          ...this.#movieInfo.userDetails,
+          isWatched: !this.#movieInfo.userDetails.isWatched
+        }
+      });
+  };
+
+  #submitComment = (film, comment) => {
+    this.#changeData(
+      UserAction.ADD_ELEMENT,
+      UpdateType.PATCH,
+      film,
+      comment
+    );
+  }
+
+  #deleteComment = (film, comment) => {
+    this.#changeData(
+      UserAction.DELETE_ELEMENT,
+      UpdateType.PATCH,
+      film,
+      comment
+    );
   };
 
   destroy = () => {

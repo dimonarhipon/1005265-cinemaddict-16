@@ -38,7 +38,7 @@ export default class FilterPresenter {
       remove(prevProfileComponent);
     }
 
-    this.#filterComponent = new NavigationFilmsView(filters, this.#filterModel);
+    this.#filterComponent = new NavigationFilmsView(filters, this.#filterModel.filter);
     this.#filterComponent.setFilterClickHandler(this.#handleFilmsFilter);
 
     if (prevFilterComponent === null) {
@@ -51,7 +51,8 @@ export default class FilterPresenter {
   }
 
   get filters() {
-    const films = this.#filmsModel.films;
+    const films = this.#filmsModel.films.map((film) => film.userDetails);
+    // console.log(films);
 
     return [{
       type: FilterType.ALL,
@@ -59,9 +60,9 @@ export default class FilterPresenter {
       count: filter[FilterType.ALL](films).length,
     },
     {
-      type: FilterType.WATCH,
+      type: FilterType.WATCHLIST,
       name: 'Watchlist',
-      count: filter[FilterType.WATCH](films).length,
+      count: filter[FilterType.WATCHLIST](films).length,
     },
     {
       type: FilterType.HISTORY,
@@ -83,7 +84,6 @@ export default class FilterPresenter {
     if (this.#filterModel.filmsFilter === filterType) {
       return;
     }
-
     this.#filterModel.setFilmsFilter(UpdateType.MAJOR, filterType);
   }
 }

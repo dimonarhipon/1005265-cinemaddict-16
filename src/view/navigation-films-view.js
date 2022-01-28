@@ -8,6 +8,8 @@ const createNavigationFilms = (filters, currentFilterType) => {
   const watchlist = findFilter('Watchlist', filters);
   const favorites = findFilter('Favorites', filters);
 
+  // console.log(filters, currentFilterType, history, watchlist, favorites);
+
   return `<nav class="main-navigation">
     <div class="main-navigation__items">
       <a href="#all"
