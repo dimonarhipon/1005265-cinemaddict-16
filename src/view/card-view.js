@@ -1,11 +1,11 @@
 import AbstractView from './abstract-view';
 import dayjs from 'dayjs';
 
-const createCard = (movie) => {
+const createCard = (movie, comments) => {
   const {title, totalRating, poster, description, genre, release, runtime} = movie.filmInfo;
   const {isWatch, isWatched, isFavorite} = movie.userDetails;
 
-  const comments = movie.comments;
+  // const comments = comments.comments;
 
 
   const ratingScore = (rating) => {
@@ -76,14 +76,16 @@ const createCard = (movie) => {
 
 export default class CardView extends AbstractView {
   #movie = null;
+  #comments = null;
 
-  constructor(movie) {
+  constructor(movie, comments) {
     super();
     this.#movie = movie;
+    this.#comments = comments;
   }
 
   get template() {
-    return createCard(this.#movie);
+    return createCard(this.#movie, this.#comments);
   }
 
   setOpenClickHandler = (callback) => {

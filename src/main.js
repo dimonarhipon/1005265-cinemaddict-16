@@ -17,7 +17,7 @@ filmsModel.films = movieData;
 const filterModel = new FilterModel();
 const commentsModel = new CommentsModel();
 
-const comments = movieData.map((item) => item.comments);
+const comments = movieData.map((item) => item.comments).flat();
 commentsModel.filmComments = comments;
 
 const header = document.querySelector('.header');

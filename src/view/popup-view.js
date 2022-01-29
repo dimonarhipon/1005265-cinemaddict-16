@@ -7,9 +7,9 @@ const createPopup = (data, commentsData) => {
   const {title, alternativeTitle, totalRating, poster, ageRating, director, writers, actors, description, genre, release, runtime} = data.filmInfo;
   const {isWatch, isWatched, isFavorite} = data.userDetails;
   const comments = commentsData;
-  const {emotionChecked} = data;
+  // const {emotion, message} = data;
 
-  const commentList = comments.map((comment) => createComment(comment)).join('');
+  const commentsTemplate = comments.map((comment) => createComment(comment)).join('');
 
   const descriptionFilm = description.length > 140 ? description.slice(0, 139).concat('...') : description;
 
@@ -136,17 +136,16 @@ const createPopup = (data, commentsData) => {
             <span class='film-details__comments-count'>${comments.length}</span></h3>
 
           <ul class='film-details__comments-list'>
-            ${commentList}
+            ${commentsTemplate}
           </ul>
 
           <div class='film-details__new-comment'>
             <div class='film-details__add-emoji-label'>
-              ${createEmotion(emotionChecked)}
+              ${createEmotion()}
             </div>
 
             <label class='film-details__comment-label'>
               <textarea class='film-details__comment-input' placeholder='Select reaction below and write comment here' name='comment'>
-
               </textarea>
             </label>
 
@@ -171,7 +170,7 @@ export default class PopupView extends SmartView {
     this.#comments = comments;
 
     this._data = PopupView.parseFilmToData(movie);
-    this._commentsData = PopupView.parseCommentToData(comments);
+    this._commentsData = comments;
     this.setInnerHandlers();
   }
 
@@ -236,23 +235,21 @@ export default class PopupView extends SmartView {
     this.element.querySelector('.film-details__control-button--watched').addEventListener('click', this.#controlWatchedClickHandler);
   };
 
-  #emotionChangeHandler = (evt) => {
-    evt.preventDefault();
-    this.saveScrollPosition();
-    this.updateData({
-      ...this._data,
-      emotionChecked: evt.target.value,
-    });
-    this.setScrollposition();
+  setSubmitComment = (callback) => {
+    this._callback.submit = callback;
+    this.element.querySelector('.film-details__comment-input').addEventListener('keydown', this.#submitComment);
   }
 
-  // #addComment = (card, comments) => {
-  //   this.updateData(
-  //     UserAction.ADD_ELEMENT,
-  //     UpdateType.PATCH,
-  //     {}
-  //   )
-  // }
+  #submitComment = (evt) => {
+    evt.preventDefault();
+
+    if (evt.keyCode === 13) {
+      this.saveScrollPosition();
+      this._callback.submit(this._data, PopupView.parseDataToFilm(this._commentsData));
+
+      this.setScrollPosition();
+    }
+  }
 
   setDeleteComment = (callback) => {
     this._callback.delete = callback;
@@ -261,16 +258,42 @@ export default class PopupView extends SmartView {
 
   #deleteComment = (evt) => {
     evt.preventDefault();
+    this.saveScrollPosition();
+
     if (evt.target.className === 'film-details__comment-delete') {
       const attr = 'data-comment-id';
       const id = evt.target.closest('.film-details__comment').getAttribute(attr);
-      const comment = this._data.comments.find((item) => item.id === id);
+      const comment = this._commentsData.find((item) => item.id === id);
       this._callback.delete(this._data, comment);
     }
+    this.setScrollPosition();
+  }
+
+  #emotionChangeHandler = (evt) => {
+    evt.preventDefault();
+    this.saveScrollPosition();
+    this.updateData({
+      ...this._data,
+      comment: {
+        emotion: evt.target.value,
+      }
+    });
+    this.setScrollposition();
+  }
+
+  #commentInputHandler = (evt) => {
+    evt.preventDefault();
+    this.saveScrollPosition();
+    this.updateData({
+      ...this._data,
+      comment: {
+        message: evt.target.value,
+      }
+    });
+    this.setScrollposition();
   }
 
   reset = (film) => {
-    // console.log(film);
     this.updateData(
       PopupView.parseFilmToData(film),
     );
@@ -283,36 +306,31 @@ export default class PopupView extends SmartView {
     this.setControlWatch(this._callback.controlWatchClick);
     this.setCloseClickHandler(this._callback.closeClick);
     this.setDeleteComment(this._callback.delete);
-    // this.setSubmitHandler(this._callback.submit);
+    this.setSubmitComment(this._callback.submit);
   }
 
   setInnerHandlers = () => {
     this.element.querySelector('.film-details__emoji-list').addEventListener('change', this.#emotionChangeHandler);
+    this.element.querySelector('.film-details__comment-input').addEventListener('input', this.#commentInputHandler);
   }
 
   static parseDataToFilm = (film) => ({
     ...film,
-    emotionChecked: ''
+    comment: {
+      filmId: film.id,
+      id: '',
+      author: '',
+      date: new Date(),
+      message: '',
+      emotion: '',
+    }
   })
 
   static parseFilmToData = (data) => {
     const film = { ...data };
 
-    delete film.emotionChecked;
+    delete film.comment;
 
     return film;
-  }
-
-  static parseDataToComment = (data, commentsData) => {
-    console.log(data, commentsData);
-    return {
-      ...data.comments,
-    }}
-
-  static parseCommentToData = (commentsData) => {
-    // console.log(commentsData);
-    const comments = [...commentsData];
-
-    return comments;
   }
 }

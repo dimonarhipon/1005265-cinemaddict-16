@@ -8,7 +8,7 @@ export default class CardPresenter {
   #popupComponent = null;
   #cardListContainer = null;
   #changeData = null;
-  #movieInfo = null;
+  #film = null;
   #comments = null;
 
   constructor(cardListContainer, changeData) {
@@ -16,15 +16,15 @@ export default class CardPresenter {
     this.#changeData = changeData;
   }
 
-  init = (movieInfo, comments) => {
-    this.#movieInfo = movieInfo;
-    this.#comments = [...comments];
+  init = (film, comments) => {
+    this.#film = film;
+    this.#comments = comments;
 
     const prevCardComponent = this.#cardComponent;
     const prevPopupComponent = this.#popupComponent;
 
-    this.#cardComponent = new CardView(movieInfo);
-    this.#popupComponent = new PopupView(movieInfo, this.#comments);
+    this.#cardComponent = new CardView(film, this.#comments);
+    this.#popupComponent = new PopupView(film, this.#comments);
 
     this.#cardComponent.setOpenClickHandler(() => {
       this.#openPopupHandler();
@@ -67,7 +67,7 @@ export default class CardPresenter {
   };
 
   #closePopupHandler = () => {
-    this.#popupComponent.reset(this.#movieInfo);
+    this.#popupComponent.reset(this.#film);
     remove(this.#popupComponent);
     document.querySelector('body').classList.remove('hide-overflow');
   };
@@ -84,10 +84,10 @@ export default class CardPresenter {
     this.#changeData(
       UserAction.UPDATE_ELEMENT,
       UpdateType.MINOR,
-      {...this.#movieInfo,
+      {...this.#film,
         userDetails: {
-          ...this.#movieInfo.userDetails,
-          isWatch: !this.#movieInfo.userDetails.isWatch
+          ...this.#film.userDetails,
+          isWatch: !this.#film.userDetails.isWatch
         }
       });
   };
@@ -96,10 +96,10 @@ export default class CardPresenter {
     this.#changeData(
       UserAction.UPDATE_ELEMENT,
       UpdateType.MINOR,
-      {...this.#movieInfo,
+      {...this.#film,
         userDetails: {
-          ...this.#movieInfo.userDetails,
-          isFavorite: !this.#movieInfo.userDetails.isFavorite
+          ...this.#film.userDetails,
+          isFavorite: !this.#film.userDetails.isFavorite
         }
       });
   };
@@ -108,10 +108,10 @@ export default class CardPresenter {
     this.#changeData(
       UserAction.UPDATE_ELEMENT,
       UpdateType.MINOR,
-      {...this.#movieInfo,
+      {...this.#film,
         userDetails: {
-          ...this.#movieInfo.userDetails,
-          isWatched: !this.#movieInfo.userDetails.isWatched
+          ...this.#film.userDetails,
+          isWatched: !this.#film.userDetails.isWatched
         }
       });
   };
