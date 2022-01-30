@@ -1,15 +1,15 @@
-import {createComment} from './comment-details-view';
+import {createComment} from './comment-view';
 import SmartView from './smart-view';
 import dayjs from 'dayjs';
 import {EMOTIONS} from '../const';
 
-const createFilmDetails = (data) => {
+const createPopup = (data, commentsData) => {
   const {title, alternativeTitle, totalRating, poster, ageRating, director, writers, actors, description, genre, release, runtime} = data.filmInfo;
   const {isWatch, isWatched, isFavorite} = data.userDetails;
-  const comments = data.comments;
-  const {emotionChecked} = data;
+  const comments = commentsData;
+  // const {emotion, message} = data;
 
-  const commentList = comments.map((comment) => createComment(comment)).join('');
+  const commentsTemplate = comments.map((comment) => createComment(comment)).join('');
 
   const descriptionFilm = description.length > 140 ? description.slice(0, 139).concat('...') : description;
 
@@ -136,17 +136,16 @@ const createFilmDetails = (data) => {
             <span class='film-details__comments-count'>${comments.length}</span></h3>
 
           <ul class='film-details__comments-list'>
-            ${commentList}
+            ${commentsTemplate}
           </ul>
 
           <div class='film-details__new-comment'>
             <div class='film-details__add-emoji-label'>
-              ${createEmotion(emotionChecked)}
+              ${createEmotion()}
             </div>
 
             <label class='film-details__comment-label'>
               <textarea class='film-details__comment-input' placeholder='Select reaction below and write comment here' name='comment'>
-
               </textarea>
             </label>
 
@@ -160,19 +159,23 @@ const createFilmDetails = (data) => {
   </section>`;
 };
 
-export default class FilmDetailsView extends SmartView {
+export default class PopupView extends SmartView {
+  #comments = null;
   _scrollPosition = 0;
   #elementScroll;
   #newElementScroll;
 
-  constructor(movie) {
+  constructor(movie, comments) {
     super();
-    this._data = FilmDetailsView.parseFilmToData(movie);
+    this.#comments = comments;
+
+    this._data = PopupView.parseFilmToData(movie);
+    this._commentsData = comments;
     this.setInnerHandlers();
   }
 
   get template() {
-    return createFilmDetails(this._data);
+    return createPopup(this._data, this._commentsData);
   }
 
   saveScrollPosition = () => {
@@ -188,6 +191,7 @@ export default class FilmDetailsView extends SmartView {
   setCloseClickHandler = (callback) => {
     this._callback.closeClick = callback;
     this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#closeClickHandler);
+    PopupView.parseDataToFilm(this._data);
   }
 
   #closeClickHandler = (evt) => {
@@ -197,7 +201,9 @@ export default class FilmDetailsView extends SmartView {
 
   #controlWatchClickHandler = (evt) => {
     evt.preventDefault();
+    this.saveScrollPosition();
     this._callback.controlWatchClick();
+    this.setScrollposition();
   }
 
   setControlWatch = (callback) => {
@@ -207,7 +213,9 @@ export default class FilmDetailsView extends SmartView {
 
   #controlFavoriteClickHandler = (evt) => {
     evt.preventDefault();
+    this.saveScrollPosition();
     this._callback.controlFavoriteClick();
+    this.setScrollposition();
   }
 
   setControlFavorite = (callback) => {
@@ -217,7 +225,9 @@ export default class FilmDetailsView extends SmartView {
 
   #controlWatchedClickHandler = (evt) => {
     evt.preventDefault();
+    this.saveScrollPosition();
     this._callback.controlWatchedClick();
+    this.setScrollposition();
   }
 
   setControlWatched = (callback) => {
@@ -225,19 +235,67 @@ export default class FilmDetailsView extends SmartView {
     this.element.querySelector('.film-details__control-button--watched').addEventListener('click', this.#controlWatchedClickHandler);
   };
 
+  setSubmitComment = (callback) => {
+    this._callback.submit = callback;
+    this.element.querySelector('.film-details__comment-input').addEventListener('keydown', this.#submitComment);
+  }
+
+  #submitComment = (evt) => {
+    evt.preventDefault();
+
+    if (evt.keyCode === 13) {
+      this.saveScrollPosition();
+      this._callback.submit(this._data, PopupView.parseDataToFilm(this._commentsData));
+
+      this.setScrollPosition();
+    }
+  }
+
+  setDeleteComment = (callback) => {
+    this._callback.delete = callback;
+    this.element.querySelector('.film-details__comments-list').addEventListener('click', this.#deleteComment);
+  }
+
+  #deleteComment = (evt) => {
+    evt.preventDefault();
+    this.saveScrollPosition();
+
+    if (evt.target.className === 'film-details__comment-delete') {
+      const attr = 'data-comment-id';
+      const id = evt.target.closest('.film-details__comment').getAttribute(attr);
+      const comment = this._commentsData.find((item) => item.id === id);
+      this._callback.delete(this._data, comment);
+    }
+    this.setScrollPosition();
+  }
+
   #emotionChangeHandler = (evt) => {
     evt.preventDefault();
     this.saveScrollPosition();
     this.updateData({
       ...this._data,
-      emotionChecked: evt.target.value,
+      comment: {
+        emotion: evt.target.value,
+      }
+    });
+    this.setScrollposition();
+  }
+
+  #commentInputHandler = (evt) => {
+    evt.preventDefault();
+    this.saveScrollPosition();
+    this.updateData({
+      ...this._data,
+      comment: {
+        message: evt.target.value,
+      }
     });
     this.setScrollposition();
   }
 
   reset = (film) => {
     this.updateData(
-      FilmDetailsView.parseFilmToData(film),
+      PopupView.parseFilmToData(film),
     );
   }
 
@@ -247,21 +305,31 @@ export default class FilmDetailsView extends SmartView {
     this.setControlFavorite(this._callback.controlFavoriteClick);
     this.setControlWatch(this._callback.controlWatchClick);
     this.setCloseClickHandler(this._callback.closeClick);
+    this.setDeleteComment(this._callback.delete);
+    this.setSubmitComment(this._callback.submit);
   }
 
   setInnerHandlers = () => {
     this.element.querySelector('.film-details__emoji-list').addEventListener('change', this.#emotionChangeHandler);
+    this.element.querySelector('.film-details__comment-input').addEventListener('input', this.#commentInputHandler);
   }
 
   static parseDataToFilm = (film) => ({
     ...film,
-    emotionChecked: ''
+    comment: {
+      filmId: film.id,
+      id: '',
+      author: '',
+      date: new Date(),
+      message: '',
+      emotion: '',
+    }
   })
 
   static parseFilmToData = (data) => {
     const film = { ...data };
 
-    delete film.emotionChecked;
+    delete film.comment;
 
     return film;
   }

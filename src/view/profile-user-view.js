@@ -5,8 +5,16 @@ const createProfileUserTemplate = () => `<section class="header__profile profile
   <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
 </section>`;
 
+
 export default class ProfileUserView extends AbstractView {
+  #filters = null;
+
+  constructor(filters) {
+    super();
+    this.#filters = filters;
+  }
+
   get template() {
-    return createProfileUserTemplate();
+    return createProfileUserTemplate(this.#filters);
   }
 }

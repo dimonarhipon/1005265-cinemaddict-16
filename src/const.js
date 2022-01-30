@@ -30,7 +30,7 @@ export const TITLS = [
 ];
 
 export const ALTERNATIVE_TITLS = [
-  'Laziness Who Sold Themselves',
+  'Laziness Who Sold Themselves', 'No Time to Die'
 ];
 
 export const DESCRIPTIONS_TEXT = [
@@ -59,4 +59,20 @@ export const SortType = {
   DEFAULT: 'defoult',
   DATE: 'date',
   RATING: 'rating'
+};
+export const FilterType = {
+  ALL: 'All movies',
+  WATCHLIST: 'Watchlist',
+  FAVORITES: 'Favorites',
+  HISTORY: 'History',
+};
+export const UserAction = {
+  ADD_ELEMENT: 'ADD_ELEMENT',
+  DELETE_ELEMENT: 'DELETE_ELEMENT',
+  UPDATE_ELEMENT: 'UPDATE_ELEMENT',
+};
+export const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
 };
